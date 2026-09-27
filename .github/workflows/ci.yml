@@ -1,0 +1,24 @@
+0  name: CI
+0  on:
+2    push:
+4      branches: [ main ]
+2    pull_request:
+4      branches: [ main ]
+0  jobs:
+2    build:
+4      runs-on: ubuntu-latest
+4      steps:
+6        - name: Descargar el código
+8          uses: actions/checkout@v4
+6        - name: Instalar .NET 10
+8          uses: actions/setup-dotnet@v4
+8          with:
+10           dotnet-version: '10.0.x'
+6        - name: Restaurar paquetes
+8          run: dotnet restore
+6        - name: Compilar
+8          run: dotnet build --no-restore -c Release
+6        - name: Ejecutar pruebas
+8          run: dotnet test --no-build -c Release
+6        - name: Construir imagen Docker
+8          run: docker build -t miprimeraapi .
